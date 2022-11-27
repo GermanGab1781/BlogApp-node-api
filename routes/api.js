@@ -5,6 +5,6 @@ const apiBooksRouter = require('./api/booksRouter')
 const middlewares = require('../middlewares')
 
 router.use('/users',apiUsersRouter)
-router.use('/books', middlewares.checkToken , apiBooksRouter)
+router.use('/books',apiBooksRouter)
 
 module.exports = router
