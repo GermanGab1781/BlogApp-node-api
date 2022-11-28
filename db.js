@@ -19,6 +19,6 @@ Book.belongsTo(User,{through:UserBooks})
 User.hasMany(Book,{onDelete:'CASCADE'})
 
 
-sequelize.sync({force:true})
+sequelize.sync({alter:true})
 
 module.exports ={Book,User}
