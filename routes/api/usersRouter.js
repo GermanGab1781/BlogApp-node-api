@@ -25,7 +25,7 @@ router.post('/login', async (req, res) => {
 	if(user) {
 		const passMatch = bcrypt.compareSync(req.body.password, user.password);
 		if(passMatch) {
-			res.json({ success: createToken(user) });
+			res.json({ success: createToken(user)},{info: user});
 		} else {
 			res.json({ error: 'Error in user / password' });
 		}
