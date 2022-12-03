@@ -1,14 +1,15 @@
 const Sequelize = require('sequelize')
 const { HasMany, BelongsTo } = require('sequelize')
+require('dotenv').config()
 
 const UserModel= require('./models/users')
 const BookModel= require('./models/books')
 const UserBooks= require('./models/usersBooks')
 
 //Database Host
-const sequelize = new Sequelize('nodeportfoliogg','germanchhow','qweqweqwe123',{
-  host:'db4free.net',
-  dialect: 'mysql'
+const sequelize = new Sequelize(process.env.NODE_DATABASE_NAME,process.env.NODE_DATABASE_USERNAME,process.env.NODE_DATABASE_PASSWORD,{
+  host:process.env.NODE_DATABASE_HOST,
+  dialect: process.env.NODE_DATABASE_DIALECT
 })
 
 
