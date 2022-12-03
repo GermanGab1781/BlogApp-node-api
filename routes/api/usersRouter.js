@@ -6,6 +6,27 @@ const bcrypt = require('bcryptjs');
 
 const { User } = require('../../db')
 
+router.get('/', async (req, res) => {
+	const users = await User.findAll();
+  const usersResults = [];
+  if (users !== null){
+    users.forEach(usr => {
+      usersResults.push({username:usr.username, userID:user.id})
+    });
+    return res.json(usersResults);
+  }
+	return res.send({error: 'No users on database'})
+});
+
+router.get('/:userId', async (req, res) => {
+	const user = await User.findByPk(req.params.userId);
+  if(user !== null){
+    const result = {username:user.username, userID:user.id}
+    return res.json(result)
+  }
+  return res.send({ error: 'No user with that id' });
+});
+
 router.post('/register', [
 	check('username', 'Username obligatory').not().isEmpty(),
 	check('password', 'Password obligatory').not().isEmpty(),
