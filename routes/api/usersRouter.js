@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
   const usersResults = [];
   if (users !== null){
     users.forEach(usr => {
-      usersResults.push({username:usr.username, userID:user.id})
+      usersResults.push({username:usr.username, userID:usr.id})
     });
     return res.json(usersResults);
   }
