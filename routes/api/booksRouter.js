@@ -7,6 +7,11 @@ router.get('/', async (req, res) => {
 	res.json(books);
 });
 
+router.get('/userBooks/:userId' ,async (req,res)=>{
+  const userBooks = await Book.findAll({where:{userId:req.params.userId}});
+  res.json(userBooks)
+})
+
 router.get('/:bookId', async (req, res) => {
 	const book = await Book.findByPk(req.params.bookId);
 	return book !== null ? res.json(book) : res.send({ error: 'No book with that id' });
