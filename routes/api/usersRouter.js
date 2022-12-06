@@ -48,7 +48,7 @@ router.post('/login', async (req, res) => {
 		if(passMatch) {
       req.session.user = user;
       console.log(req.session.user)
-			res.json({ success: createToken(user), username:user.username, userID:user.id, email:user.email});
+			res.json({ success: createToken(user), dateishon:user});
 		} else {
 			res.json({ error: 'Error in user / password' });
 		}
