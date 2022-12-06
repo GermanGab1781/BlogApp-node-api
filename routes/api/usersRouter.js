@@ -46,6 +46,8 @@ router.post('/login', async (req, res) => {
 	if(user) {
 		const passMatch = bcrypt.compareSync(req.body.password, user.password);
 		if(passMatch) {
+      req.session.user = user;
+      console.log(req.session.user)
 			res.json({ success: createToken(user), username:user.username, userID:user.id, email:user.email});
 		} else {
 			res.json({ error: 'Error in user / password' });
@@ -55,11 +57,19 @@ router.post('/login', async (req, res) => {
 	}
 });
 
+router.get('/loginCheck', (req,res)=>{
+  if(req.session.user){
+    res.send({loggedIn:true,user:req.session.user})
+  }else{
+    res.send({loggedIn:false})
+  }
+})
+
 const createToken = (user) => {
 	const payload = {
 		usuarioId: user.id,
 		createdAt: moment().unix(),
-		expiresAt: moment().add(5, 'minutes').unix()
+		expiresAt: moment().add(15, 'minutes').unix()
 	};
 	return jwt.encode(payload, 'SecretPhrase');
 };
