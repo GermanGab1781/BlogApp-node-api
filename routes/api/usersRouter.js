@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const { check, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 require('dotenv').config()
-const middlewares = require('../middlewares')
+const middlewares = require('./middlewares')
 const { User } = require('../../db')
 
 router.get('/', async (req, res) => {
