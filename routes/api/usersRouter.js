@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const { check, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 require('dotenv').config()
-const middlewares = require('./middlewares')
+const {verifyJWT} = require('../../middlewares')
 const { User } = require('../../db')
 
 router.get('/', async (req, res) => {
@@ -61,7 +61,7 @@ router.post('/login', async (req, res) => {
 	}
 });
 
-router.get('/loginCheck',middlewares.verifyJWT, (req,res)=>{
+router.get('/loginCheck',verifyJWT, (req,res)=>{
   res.json({authenticated:true})
 })
 
