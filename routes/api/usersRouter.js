@@ -1,9 +1,10 @@
 const router = require('express').Router();
 const moment = require('moment');
-const jwt = require('jwt-simple');
+const jwt = require('jsonwebtoken');
 const { check, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
-
+require('dotenv').config()
+const middlewares = require('../middlewares')
 const { User } = require('../../db')
 
 router.get('/', async (req, res) => {
@@ -45,33 +46,25 @@ router.post('/login', async (req, res) => {
 	const user = await User.findOne({ where: { email: req.body.email }});
 	if(user) {
 		const passMatch = bcrypt.compareSync(req.body.password, user.password);
-		if(passMatch) {
+		if(passMatch) {     
+      const id = user.id;
+      const token = jwt.sign({id},process.env.JWT_DATABASE_SECRET,{
+        expiresIn:150,       
+      })
       req.session.user = user;
-      console.log(req.session.user)
-			res.json({ success: createToken(user), dateishon:user});
+			res.json({authorized:true, token:token,userId:user.id,username:user.username});
 		} else {
-			res.json({ error: 'Error in user / password' });
+			res.json({authorized:false, error: 'Error in user / password' });
 		}
 	} else {
-		res.json({ error: 'Error in user / password' });
+		res.json({authorized:false, error: 'Error in user / password' });
 	}
 });
 
-router.get('/loginCheck', (req,res)=>{
-  if(req.session.user){
-    res.send({loggedIn:true,user:req.session.user})
-  }else{
-    res.send({loggedIn:false})
-  }
+router.get('/loginCheck',middlewares.verifyJWT, (req,res)=>{
+  res.json({authenticated:true})
 })
 
-const createToken = (user) => {
-	const payload = {
-		usuarioId: user.id,
-		createdAt: moment().unix(),
-		expiresAt: moment().add(15, 'minutes').unix()
-	};
-	return jwt.encode(payload, 'SecretPhrase');
-};
+
 
 module.exports = router;

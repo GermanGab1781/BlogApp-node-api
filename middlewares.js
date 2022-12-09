@@ -1,21 +1,20 @@
-const jwt = require('jwt-simple')
+const jwt = require('jsonwebtoken')
+require('dotenv').config()
 
-const checkToken = (req, res, next) => {
-	if(!req.headers['access-token'])	{
-		res.json({ error: 'You need to include the access-token in the headers' })
-	}
-	const accessToken = req.headers['access-token']
-	let payload = {}
-	try {
-		payload = jwt.decode(accessToken, 'secretPhrase')
-	} catch(error) {
-		return res.json({ error: 'Access-token is Incorrect' })
-	}
-	if(payload.expiresAt < moment().unix()) {
-		return res.json({ error: 'Access-token has expired' })
-	}
-	req.usuarioId = payload.usuarioId
-	next()
+const verifyJWT = (req, res, next) => {
+	const token = req.headers["x-access-token"]
+  if(!token){
+    res.json({authenticated:false,error:"No token in header"})
+  }else{
+    jwt.verify(token,process.env.JWT_DATABASE_SECRET,(err,decoded)=>{
+      if(err){
+        res.json({authenticated:false,error:"You failed to authenticate"})
+      }else{
+        req.userId = decoded.id;
+        next()
+      }
+    })
+  }
 }
 
-module.exports = {checkToken}
+module.exports = {verifyJWT}
