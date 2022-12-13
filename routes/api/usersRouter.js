@@ -75,7 +75,7 @@ router.post('/login', async (req, res) => {
       );
       await User.update({refreshToken:refreshToken},{where:{id:user.id}})
       res.cookie('jwt',refreshToken,{httpOnly:true,maxAge:24*60*60*1000});
-      res.json({accessToken})
+      res.json({authorized:true,accessToken:accessToken})
 		} else {
 			res.json({authorized:false, error: 'Error in user / password' });
 		}
