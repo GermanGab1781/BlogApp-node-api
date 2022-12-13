@@ -6,7 +6,16 @@ module.exports= (sequelize,type)=>{
       autoIncrement:true
     },
     username:type.STRING,
+
+    role:type.STRING,
+
     email:type.STRING,
-    password:type.STRING
+
+    password:type.STRING,
+
+    refreshToken:{
+      type:type.STRING,
+      defaultValue: " "
+    }
   })
 }

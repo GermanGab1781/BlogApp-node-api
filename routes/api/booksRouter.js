@@ -1,6 +1,7 @@
 const router = require('express').Router();
-
+const verifyRoles =require('../../middleware/verifyRoles');
 const { Book } = require('../../db');
+
 
 router.get('/', async (req, res) => {
 	const books = await Book.findAll();
@@ -12,7 +13,7 @@ router.get('/userBooks/:userId' ,async (req,res)=>{
   res.json(userBooks)
 })
 
-router.get('/:bookId', async (req, res) => {
+router.get('/:bookId',verifyRoles("Admin"), async (req, res) => {
 	const book = await Book.findByPk(req.params.bookId);
 	return book !== null ? res.json(book) : res.send({ error: 'No book with that id' });
 });
