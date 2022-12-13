@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize')
 const { HasMany, BelongsTo } = require('sequelize')
-require('dotenv').config()
+require("dotenv").config();
 
 const UserModel= require('./models/users')
 const BookModel= require('./models/books')

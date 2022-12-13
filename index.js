@@ -3,7 +3,6 @@ const bodyParser = require ('body-parser')
 const apiRouter = require('./routes/api')
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-/* const session = require('express-session'); */
 require('dotenv').config()
 const app = express()
 
@@ -18,15 +17,6 @@ app.use(cors({
 }));
 app.use(cookieParser())
 
-/* app.use(session({
-  key:"userId",
-  secret:process.env.SESSION_DATABASE_SECRET,
-  resave:false,
-  saveUninitialized:false,
-  cookie:{
-    expires:60*60*24,
-  }
-})) */
 
 app.use('/api',apiRouter)
 
