@@ -90,6 +90,7 @@ router.get('/refreshToken', async (req,res)=>{
   const refreshToken = cookies.jwt;
   const foundUser = User.findOne({where:{refreshToken:refreshToken}})
   if(!foundUser)return res.sendStatus(403);
+  const foundUserRole = foundUser.role
   jwt.verify(
     refreshToken,
     process.env.JWT_REFRESH_DATABASE_SECRET,
@@ -106,7 +107,7 @@ router.get('/refreshToken', async (req,res)=>{
         process.env.JWT_ACCESS_DATABASE_SECRET,
         {expiresIn:'300s'}
       );
-      res.json({role:foundUser.role,accessToken:accessToken})
+      res.json({role:foundUserRole,accessToken:accessToken})
     }
   );
 })
