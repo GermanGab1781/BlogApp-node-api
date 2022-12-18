@@ -106,7 +106,7 @@ router.get('/refreshToken', async (req,res)=>{
         process.env.JWT_ACCESS_DATABASE_SECRET,
         {expiresIn:'300s'}
       );
-      res.json({role:foundUser.role,accessToken})
+      res.json({role:foundUser.role,accessToken:accessToken})
     }
   );
 })
