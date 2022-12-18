@@ -74,7 +74,7 @@ router.post('/login', async (req, res) => {
         {expiresIn:'1d'}
       );
       await User.update({refreshToken:refreshToken},{where:{id:user.id}})
-      res.cookie('jwt',refreshToken,{httpOnly:true,maxAge:24*60*60*1000});
+      res.cookie('jwt',refreshToken,{httpOnly:true,sameSite:'none',maxAge:24*60*60*1000});
       res.json({authorized:true,accessToken:accessToken,Role:user.role})
 		} else {
 			res.json({authorized:false, error: 'Error in user / password' });
@@ -106,7 +106,7 @@ router.get('/refreshToken', async (req,res)=>{
         process.env.JWT_ACCESS_DATABASE_SECRET,
         {expiresIn:'300s'}
       );
-      res.json({accessToken})
+      res.json({role:foundUser.role,accessToken})
     }
   );
 })
