@@ -20,6 +20,6 @@ app.use(cookieParser())
 
 app.use('/api',apiRouter)
 
-app.listen('3000', ()=>{
-  console.log('app listening to 3000 B)')
+app.listen('3001', ()=>{
+  console.log('app listening to 3001 B)')
 })

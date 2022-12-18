@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
   const usersResults = [];
   if (users !== null){
     users.forEach(usr => {
-      usersResults.push({username:usr.username, userID:usr.id})
+      usersResults.push({username:usr.username, userID:usr.id,role:usr.role})
     });
     return res.json(usersResults);
   }
@@ -88,14 +88,14 @@ router.get('/refreshToken', async (req,res)=>{
   const cookies = req.cookies;
   if(!cookies?.jwt) return res.sendStatus(401);
   const refreshToken = cookies.jwt;
-  const foundUser = User.findOne({where:{refreshToken:refreshToken}})
+  const foundUser = await User.findOne({where:{refreshToken:refreshToken}})
   if(!foundUser)return res.sendStatus(403);
-  const foundUserRole = foundUser.role
   jwt.verify(
     refreshToken,
     process.env.JWT_REFRESH_DATABASE_SECRET,
     (err,decoded)=>{
-      if(err || foundUser.username !== decoded.username)return res.sendStatus(403);
+      if(err || (foundUser.username !== decoded.UserInfo.username))return res.sendStatus(403);
+      const role = foundUser.role     
       const accessToken = jwt.sign(
         {"UserInfo":
           {
@@ -107,7 +107,7 @@ router.get('/refreshToken', async (req,res)=>{
         process.env.JWT_ACCESS_DATABASE_SECRET,
         {expiresIn:'300s'}
       );
-      res.json({role:foundUserRole,accessToken:accessToken})
+      res.json({role,accessToken})
     }
   );
 })
