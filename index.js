@@ -3,6 +3,7 @@ const bodyParser = require ('body-parser')
 const apiRouter = require('./routes/api')
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const { User } = require('./db');
 require('dotenv').config()
 const app = express()
 
@@ -21,5 +22,5 @@ app.use(cookieParser())
 app.use('/api',apiRouter)
 
 app.listen('3001', ()=>{
-  console.log('app listening to 3001 B)')
+  console.log()
 })

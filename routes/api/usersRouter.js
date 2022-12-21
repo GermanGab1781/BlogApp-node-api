@@ -18,6 +18,44 @@ router.get('/', async (req, res) => {
 	return res.send({error: 'No users on database'})
 });
 
+router.get('/getFollowers/:userId',async(req,res)=>{
+  const user = await User.findOne({
+    where:{id:req.params.userId},
+    include:'followers'
+  })
+  if(user !== null){
+    if (user.followers.length > 0){
+      const followersArr = []
+      user.followers.forEach(usr=>{followersArr.push({username:usr.username,id:usr.id})})  
+      res.json({followers:followersArr,quantity:followersArr.length})
+      return
+    }else if (user.followers.length === 0){
+      res.json({followers:'No followers',quantity:0})
+      return
+    }
+  }
+  res.send('UserNotFound')
+})
+
+router.get('/getFollowing/:userId',async(req,res)=>{
+  const user = await User.findOne({
+    where:{id:req.params.userId},
+    include:'following'
+  })
+  if(user !== null){
+    if (user.following.length > 0){
+      const followingArr = []
+      user.following.forEach(usr=>{followingArr.push({username:usr.username,id:usr.id})})  
+      res.json({following:followingArr,quantity:followingArr.length})
+      return
+    }else if (user.following.length === 0){
+      res.json({following:'No one follows you',quantity:0})
+      return
+    }
+  }
+  res.send('UserNotFound')
+})
+
 router.get('/lookfor/:userId', async (req, res) => {
 	const user = await User.findByPk(req.params.userId);
   if(user !== null){
@@ -123,7 +161,7 @@ router.get('/logout',async(req,res)=>{
     return res.sendStatus(204);
   }
   await User.update({refreshToken:' '},{where:{refreshToken:refreshToken}})
-  res.clearCookie('jwt',{httpOnly:true,maxAge:24*60*60*1000});
+  res.clearCookie('jwt',{httpOnly:true,sameSite:'none',secure:true,maxAge:24*60*60*1000});
   res.send('Logout successful')
 })
 

@@ -1,5 +1,5 @@
 module.exports= (sequelize,type) =>{
-  return sequelize.define('UsersBooks',{
+  return sequelize.define('UsersBlogs',{
     id:{
       type: type.INTEGER,
         primaryKey: true,
