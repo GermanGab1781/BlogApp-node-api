@@ -11,7 +11,7 @@ module.exports= (sequelize,type)=>{
 
     email:type.STRING,
 
-    password:type.STRING(24),
+    password:type.STRING,
 
     refreshToken:{
       type:type.STRING,

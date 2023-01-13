@@ -88,7 +88,7 @@ router.post('/register', [
     password:req.body.password,
     refreshToken:" " 
   });
-	res.json(user);
+	res.send('Registration completed!!');
 });
 
 router.post('/login', async (req, res) => {
