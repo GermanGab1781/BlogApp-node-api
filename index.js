@@ -17,7 +17,7 @@ app.use(cors({
   credentials:true
 }));
 app.use(cookieParser())
-
+app.listen()
 
 app.use('/api',apiRouter)
 
