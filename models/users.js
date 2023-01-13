@@ -5,13 +5,13 @@ module.exports= (sequelize,type)=>{
       primaryKey:true,
       autoIncrement:true
     },
-    username:type.STRING,
+    username:type.STRING(20),
 
     role:type.STRING,
 
     email:type.STRING,
 
-    password:type.STRING,
+    password:type.STRING(24),
 
     refreshToken:{
       type:type.STRING,

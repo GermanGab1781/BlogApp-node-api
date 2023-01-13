@@ -5,7 +5,8 @@ module.exports = (sequelize , type) =>{
       primaryKey:true,
       autoIncrement:true
     },
-    title: type.STRING,
-    text: type.STRING,
+    title: type.STRING(30),
+    username:type.STRING,
+    text: type.STRING(600),
   })
 }

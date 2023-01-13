@@ -56,10 +56,16 @@ router.get('/getFollowing/:userId',async(req,res)=>{
   res.send('UserNotFound')
 })
 
-router.get('/lookfor/:userId', async (req, res) => {
-	const user = await User.findByPk(req.params.userId);
+router.get('/userProfile/:userId', async (req, res) => {
+	const user = await User.findOne({
+    where:{id:req.params.userId},
+    include:{all:true}
+  })
   if(user !== null){
-    const result = {username:user.username, userID:user.id}
+    const followingNumber = user.following.length
+    const followersNumber = user.followers.length 
+    
+    const result = {username:user.username, userID:user.id,followersNumber,followingNumber}
     return res.json(result)
   }
   return res.send({ error: 'No user with that id' });
@@ -109,16 +115,16 @@ router.post('/login', async (req, res) => {
           }
         },
         process.env.JWT_REFRESH_DATABASE_SECRET,
-        {expiresIn:'1d'}
+        {expiresIn:'6000s'}
       );
       await User.update({refreshToken:refreshToken},{where:{id:user.id}})
-      res.cookie('jwt',refreshToken,{httpOnly:true,sameSite:'none',secure:true,maxAge:24*60*60*1000});
-      res.json({authorized:true,accessToken:accessToken,Role:user.role})
+      res.cookie('jwt',refreshToken,{httpOnly:true,sameSite:'None',secure:true,maxAge:24*60*60*1000});
+      res.json({authorized:true,accessToken:accessToken,Role:user.role,UserId:user.id,username:user.username})
 		} else {
-			res.json({authorized:false, error: 'Error in user / password' });
+			res.json({authorized:false, error: 'Error in email / password' });
 		}
 	} else {
-		res.json({authorized:false, error: 'Error in user / password' });
+		res.json({authorized:false, error: 'Error in email / password' });
 	}
 });
 
@@ -133,7 +139,9 @@ router.get('/refreshToken', async (req,res)=>{
     process.env.JWT_REFRESH_DATABASE_SECRET,
     (err,decoded)=>{
       if(err || (foundUser.username !== decoded.UserInfo.username))return res.sendStatus(403);
-      const role = foundUser.role     
+      const role = foundUser.role
+      const UserId = foundUser.id     
+      const username = foundUser.username    
       const accessToken = jwt.sign(
         {"UserInfo":
           {
@@ -143,9 +151,9 @@ router.get('/refreshToken', async (req,res)=>{
           }
         },
         process.env.JWT_ACCESS_DATABASE_SECRET,
-        {expiresIn:'300s'}
+        {expiresIn:'500s'}
       );
-      res.json({role,accessToken})
+      res.json({role,accessToken,UserId,username})
     }
   );
 })
@@ -161,7 +169,7 @@ router.get('/logout',async(req,res)=>{
     return res.sendStatus(204);
   }
   await User.update({refreshToken:' '},{where:{refreshToken:refreshToken}})
-  res.clearCookie('jwt',{httpOnly:true,sameSite:'none',secure:true,maxAge:24*60*60*1000});
+  res.clearCookie('jwt',{httpOnly:true,sameSite:'None',secure:true,maxAge:24*60*60*1000});
   res.send('Logout successful')
 })
 
