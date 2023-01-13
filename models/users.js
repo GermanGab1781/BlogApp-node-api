@@ -5,7 +5,7 @@ module.exports= (sequelize,type)=>{
       primaryKey:true,
       autoIncrement:true
     },
-    username:type.STRING(20),
+    username:type.STRING(24),
 
     role:type.STRING,
 
