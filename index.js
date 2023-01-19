@@ -3,10 +3,9 @@ const bodyParser = require ('body-parser')
 const apiRouter = require('./routes/api')
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const { User } = require('./db');
 require('dotenv').config()
 const app = express()
-
+const PORT = process.env.PORT || 3030;
 require('./db')
 
 app.use(bodyParser.json())
@@ -21,6 +20,6 @@ app.use(cookieParser())
 
 app.use('/api',apiRouter)
 
-app.listen(()=>{
+app.listen(PORT,()=>{
   console.log('server started')
 })
