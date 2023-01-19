@@ -11,8 +11,8 @@ require('./db')
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(cors({
-  origin: ["https://blog-app-gold-two.vercel.app/"],
-  methods:["GET", "POST","UPDATE"],
+  origin: ['https://blog-app-gold-two.vercel.app','https://blog-app-node-api.onrender.com','http://localhost:3000'],
+  methods:['GET', 'POST','UPDATE'],
   credentials:true  
 }));
 app.use(cookieParser())
