@@ -25,6 +25,6 @@ User.hasMany(Blog)
 
 
 
-sequelize.sync({alter:true})
+sequelize.sync({})
 
 module.exports = { Blog, User }

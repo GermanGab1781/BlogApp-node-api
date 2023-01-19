@@ -21,6 +21,6 @@ app.use(cookieParser())
 
 app.use('/api',apiRouter)
 
-app.listen( ()=>{
+app.listen(()=>{
   console.log('server started')
 })
