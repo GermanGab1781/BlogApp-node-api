@@ -16,7 +16,7 @@ router.get('/:blogId', async (req, res) => {
 	const blog = await Blog.findByPk(req.params.blogId);
 	return blog !== null ? res.json(blog) : res.send({ error: 'No blog with that id' });
 });
-
+ 
 router.post('/', async (req, res) => {
 	const blog = await Blog.create(req.body);
   res.json(blog);
@@ -35,5 +35,5 @@ router.delete('/:blogId', async (req, res) => {
 	});
 	res.json({ success: 'Blog successfully deleted' });
 });
-
+ 
 module.exports = router;
